@@ -42,71 +42,65 @@
 #include "usart.h"
 #include "tim.h"
 #include "gpio.h"
-
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE END PV */
+#include "string.h"
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 
-/* USER CODE BEGIN PFP */
-/* Private function prototypes -----------------------------------------------*/
 
-/* USER CODE END PFP */
-
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
+UART_HandleTypeDef UartHandle;
 
 int main(void)
 {
 
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration----------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
-  SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
+  
+  HAL_Init(); //Reset of all peripherals, Initializes the Flash interface and the Systick.
+  SystemClock_Config(); // Config sys clk
   MX_GPIO_Init();
   MX_DMA_Init();
-
-  /* USER CODE BEGIN 2 */
-
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+  //BSP_LED_On(LED3);
+  
+  
+  
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    /* Initialization Error */
+    Error_Handler();
+  }
+  
+  char TxM1[] = "\n\r I'm alive\n\r";
+  uint16_t TxM1_L = strlen(TxM1);
+  
+  if (HAL_UART_Transmit_DMA(&huart2, (uint8_t *)TxM1, TxM1_L) != HAL_OK)
+  {
+    /* Transfer error in transmission process */
+    Error_Handler();
+  }  
+  
+  if (HAL_UART_Init(&hlpuart1) != HAL_OK)
+  {
+    /* Initialization Error */
+    Error_Handler();
+  }
+  
+  char TxM2[] = "\n\r Debug Port Active\n\r";
+  uint16_t TxM2_L = strlen(TxM1);
+  
+  
+    if (HAL_UART_Transmit_DMA(&hlpuart1, (uint8_t *)TxM2, TxM2_L) != HAL_OK)
+  {
+    /* Transfer error in transmission process */
+    Error_Handler();
+  }  
+  
+  
   while (1)
   {
-  /* USER CODE END WHILE */
 
-  /* USER CODE BEGIN 3 */
+
 
   }
-  /* USER CODE END 3 */
+  
 
 }
 
