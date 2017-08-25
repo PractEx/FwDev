@@ -46,7 +46,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-
+//static void Error_Handler(void);
 
 UART_HandleTypeDef UartHandle;
 
@@ -60,11 +60,13 @@ int main(void)
   MX_DMA_Init();
   //BSP_LED_On(LED3);
   
+  MX_LPUART1_UART_Init();
+  MX_USART2_UART_Init();
   
   
   if (HAL_UART_Init(&huart2) != HAL_OK)
   {
-    /* Initialization Error */
+    // Initialization Error
     Error_Handler();
   }
   
@@ -77,11 +79,11 @@ int main(void)
     Error_Handler();
   }  
   
-  if (HAL_UART_Init(&hlpuart1) != HAL_OK)
+  /*if (HAL_UART_Init(&hlpuart1) != HAL_OK)
   {
-    /* Initialization Error */
+    // Initialization Error 
     Error_Handler();
-  }
+  }*/
   
   char TxM2[] = "\n\r Debug Port Active\n\r";
   uint16_t TxM2_L = strlen(TxM1);
