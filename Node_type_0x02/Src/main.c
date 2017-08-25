@@ -46,23 +46,28 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-//static void Error_Handler(void);
 
-UART_HandleTypeDef UartHandle;
+//UART_HandleTypeDef UartHandle;
+
+#define  PERIOD_VALUE       (uint32_t)(700 - 1)  /* Period Value  */
+#define  PULSE1_VALUE       (uint32_t)(PERIOD_VALUE/2)        /* Capture Compare 1 Value  */
+#define  PULSE2_VALUE       (uint32_t)(PERIOD_VALUE*37.5/100) /* Capture Compare 2 Value  */
+#define  PULSE3_VALUE       (uint32_t)(PERIOD_VALUE/4)        /* Capture Compare 3 Value  */
+#define  PULSE4_VALUE       (uint32_t)(PERIOD_VALUE*12.5/100) /* Capture Compare 4 Value  */
+
 
 int main(void)
 {
 
   
-  HAL_Init(); //Reset of all peripherals, Initializes the Flash interface and the Systick.
-  SystemClock_Config(); // Config sys clk
-  MX_GPIO_Init();
-  MX_DMA_Init();
-  //BSP_LED_On(LED3);
+  HAL_Init();                   //Reset of all peripherals, Initializes the Flash interface and the Systick.
+  SystemClock_Config();         // Config sys clk
+  MX_GPIO_Init();               // init gpio
+  MX_DMA_Init();                // init DMP
   
-  MX_LPUART1_UART_Init();
-  MX_USART2_UART_Init();
-  
+  MX_LPUART1_UART_Init();       // init debugger uart
+  MX_USART2_UART_Init();        // init rs485 comm uart
+  MX_TIM2_Init();               // init timer2 for pwms
   
   if (HAL_UART_Init(&huart2) != HAL_OK)
   {
@@ -94,7 +99,18 @@ int main(void)
     /* Transfer error in transmission process */
     Error_Handler();
   }  
+
+  sConfigOC.Pulse = PULSE1_VALUE;
+  HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1);
+  sConfigOC.Pulse = PULSE2_VALUE;
+  HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);
+  sConfigOC.Pulse = PULSE3_VALUE;
+  HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_3);
+  sConfigOC.Pulse = PULSE4_VALUE;
+  HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_4);
   
+  //USART2_CR1.WAKE = 1;
+  //USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
   
   while (1)
   {
