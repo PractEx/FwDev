@@ -49,10 +49,10 @@ void SystemClock_Config(void);
 
 //UART_HandleTypeDef UartHandle;
 
-#define  PERIOD_VALUE       (uint32_t)(700 - 1)  /* Period Value  */
-#define  PULSE1_VALUE       (uint32_t)(PERIOD_VALUE/2)        /* Capture Compare 1 Value  */
-#define  PULSE2_VALUE       (uint32_t)(PERIOD_VALUE*37.5/100) /* Capture Compare 2 Value  */
-#define  PULSE3_VALUE       (uint32_t)(PERIOD_VALUE/4)        /* Capture Compare 3 Value  */
+#define  PERIOD_VALUE       (uint32_t)(1024 - 1)  /* Period Value  */
+#define  PULSE1_VALUE       (uint32_t)(PERIOD_VALUE*95/100)        /* Capture Compare 1 Value  */
+#define  PULSE2_VALUE       (uint32_t)(PERIOD_VALUE*60/100) /* Capture Compare 2 Value  */
+#define  PULSE3_VALUE       (uint32_t)(PERIOD_VALUE*37.5/100)        /* Capture Compare 3 Value  */
 #define  PULSE4_VALUE       (uint32_t)(PERIOD_VALUE*12.5/100) /* Capture Compare 4 Value  */
 
 
@@ -108,6 +108,12 @@ int main(void)
   HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_3);
   sConfigOC.Pulse = PULSE4_VALUE;
   HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_4);
+  
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+      HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+        HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+  
   
   //USART2_CR1.WAKE = 1;
   //USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);

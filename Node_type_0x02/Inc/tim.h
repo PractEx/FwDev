@@ -52,6 +52,7 @@
 /* USER CODE END Includes */
 
 extern TIM_HandleTypeDef htim2;
+extern TIM_OC_InitTypeDef sConfigOC;
 
 /* USER CODE BEGIN Private defines */
 
