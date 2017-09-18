@@ -39,8 +39,29 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l0xx_hal.h"
 
+#define TIMx_CLK_ENABLE()              __HAL_RCC_TIM21_CLK_ENABLE()
+/* Definition for TIMx's NVIC */
+#define TIMx_IRQn                      TIM21_IRQn
+#define TIMx_IRQHandler                TIM21_IRQHandler
+
 extern void _Error_Handler(char *, int);
 /* USER CODE BEGIN 0 */
+
+
+/*void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
+{
+  //##-1- Enable peripheral clock #################################
+  ///TIMx Peripheral clock enable 
+  TIMx_CLK_ENABLE();
+  
+  //##-2- Configure the NVIC for TIMx ########################################
+  // Set the TIMx priority 
+  HAL_NVIC_SetPriority(TIMx_IRQn, 3, 0);
+
+  // Enable the TIMx global Interrupt 
+  HAL_NVIC_EnableIRQ(TIMx_IRQn);
+}*/
+
 
 /* USER CODE END 0 */
 /**

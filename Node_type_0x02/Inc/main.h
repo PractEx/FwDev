@@ -40,6 +40,9 @@
 #define __MAIN_H
   /* Includes ------------------------------------------------------------------*/
 
+//#include "stm32l0xx_hal.h"
+//#include "stm32l0xx_nucleo_32.h"
+
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -48,6 +51,16 @@
 
 #define LD3_Pin GPIO_PIN_3
 #define LD3_GPIO_Port GPIOB
+
+/* Definition for TIMx clock resources */
+//#define TIMx                           TIM21
+//#define TIMx_CLK_ENABLE()              __HAL_RCC_TIM21_CLK_ENABLE()
+
+
+/* Definition for TIMx's NVIC */
+//#define TIMx_IRQn                      TIM21_IRQn
+//#define TIMx_IRQHandler                TIM21_IRQHandler
+
 
 /* USER CODE BEGIN Private defines */
 

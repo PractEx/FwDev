@@ -43,6 +43,7 @@
 #include "tim.h"
 #include "gpio.h"
 #include "string.h"
+#include "stm32l0xx_it.h"
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -55,10 +56,13 @@ void SystemClock_Config(void);
 #define  PULSE3_VALUE       (uint32_t)(PERIOD_VALUE*37.5/100)        /* Capture Compare 3 Value  */
 #define  PULSE4_VALUE       (uint32_t)(PERIOD_VALUE*12.5/100) /* Capture Compare 4 Value  */
 
+uint32_t timer_value2 = 0;
+uint32_t timer_value21 = 0;
+
 
 int main(void)
 {
-
+  
   
   HAL_Init();                   //Reset of all peripherals, Initializes the Flash interface and the Systick.
   SystemClock_Config();         // Config sys clk
@@ -68,6 +72,10 @@ int main(void)
   MX_LPUART1_UART_Init();       // init debugger uart
   MX_USART2_UART_Init();        // init rs485 comm uart
   MX_TIM2_Init();               // init timer2 for pwms
+  MX_TIM21_Init();              // init timer21 for pwms
+  
+  //HAL_TIM_Base_Start_IT(&htim21); 
+  HAL_TIM_Base_Start(&htim21); 
   
   if (HAL_UART_Init(&huart2) != HAL_OK)
   {
@@ -114,22 +122,38 @@ int main(void)
       HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
         HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
   
+     
+        
+        HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+        HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+        HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+        HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
   
   //USART2_CR1.WAKE = 1;
   //USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
   
   while (1)
   {
-
-
-
+  //HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin); //heartbeat
+    timer_value21 = __HAL_TIM_GET_COUNTER(&htim21);
+    timer_value2 = __HAL_TIM_GET_COUNTER(&htim2);
+  
   }
   
 
 }
 
-/** System Clock Configuration
-*/
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  //BSP_LED_Toggle(LED3);
+  //if (htim->Instance == TIM21) 
+  //{ // maybe not needed
+    HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+  //}
+}
+
+// System Clock Configuration
+
 void SystemClock_Config(void)
 {
 

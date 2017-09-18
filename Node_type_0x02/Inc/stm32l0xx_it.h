@@ -48,6 +48,8 @@
 void SysTick_Handler(void);
 void DMA1_Channel2_3_IRQHandler(void);
 void DMA1_Channel4_5_6_7_IRQHandler(void);
+void TIMx_IRQHandler(void);
+
 
 #ifdef __cplusplus
 }

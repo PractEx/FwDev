@@ -40,11 +40,16 @@
 /* Includes ------------------------------------------------------------------*/
 #include "tim.h"
 
+    
+/* Prescaler declaration */
+uint32_t uwPrescalerValue = 0;
+
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim21;
 TIM_OC_InitTypeDef sConfigOC;
 
 /* TIM2 init function */
@@ -110,6 +115,51 @@ void MX_TIM2_Init(void)
 
 }
 
+/* TIM21 init function */
+void MX_TIM21_Init(void)
+{
+  __TIM21_CLK_ENABLE();
+    htim21.Init.Prescaler = 1;
+    htim21.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim21.Init.Period = 500;
+    htim21.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    //htim21.Init.RepetitionCounter = 0;
+    HAL_TIM_Base_Init(&htim21);
+    //HAL_TIM_Base_Start(&htim21);
+  
+  /*
+  uwPrescalerValue = (uint32_t)(SystemCoreClock / 5000) - 1;  // it always +1
+  TIM_ClockConfigTypeDef sClockSourceConfig;
+  TIM_MasterConfigTypeDef sMasterConfig;
+  htim21.Instance = TIM21;
+  //htim21.Init.Prescaler = 1;
+  htim21.Init.Prescaler = uwPrescalerValue;
+  htim21.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim21.Init.Period = 255;
+  //htim21.Init.ClockDivision = TIM_CLOCKDIVISION_DIV4;
+  htim21.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  if (HAL_TIM_Base_Init(&htim21) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim21, &sClockSourceConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  //sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_UPDATE;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim21, &sMasterConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+ */
+}
+
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
 {
 
@@ -124,6 +174,18 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
 
   /* USER CODE END TIM2_MspInit 1 */
   }
+  
+  // This seems to be missing
+  if(tim_baseHandle->Instance==TIM21)
+  {
+    __HAL_RCC_TIM21_CLK_ENABLE();
+      // Set the TIMx priority 
+  HAL_NVIC_SetPriority(TIM21_IRQn, 3, 0);
+
+  // Enable the TIMx global Interrupt 
+  HAL_NVIC_EnableIRQ(TIM21_IRQn);
+  }
+  
 }
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
 {

@@ -44,6 +44,7 @@ extern DMA_HandleTypeDef hdma_lpuart1_rx;
 extern DMA_HandleTypeDef hdma_lpuart1_tx;
 extern DMA_HandleTypeDef hdma_usart2_rx;
 extern DMA_HandleTypeDef hdma_usart2_tx;
+extern TIM_HandleTypeDef TimHandle;
 
 /******************************************************************************/
 /*            Cortex-M0+ Processor Interruption and Exception Handlers         */ 
@@ -99,6 +100,11 @@ void DMA1_Channel4_5_6_7_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Channel4_5_6_7_IRQn 1 */
 
   /* USER CODE END DMA1_Channel4_5_6_7_IRQn 1 */
+}
+
+void TIMx_IRQHandler(void)
+{
+  HAL_TIM_IRQHandler(&TimHandle);
 }
 
 /* USER CODE BEGIN 1 */
