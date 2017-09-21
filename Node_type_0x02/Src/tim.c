@@ -118,15 +118,18 @@ void MX_TIM2_Init(void)
 /* TIM21 init function */
 void MX_TIM21_Init(void)
 {
-  __TIM21_CLK_ENABLE();
-    htim21.Init.Prescaler = 1;
+  //__TIM21_CLK_ENABLE();
+    htim21.Instance = TIM21;  
+    htim21.Init.Prescaler = 799; //(2,000,000/2500)-1
     htim21.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim21.Init.Period = 500;
-    htim21.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htim21.Init.Period = 40;
+    htim21.Init.ClockDivision = 0;
     //htim21.Init.RepetitionCounter = 0;
-    HAL_TIM_Base_Init(&htim21);
-    //HAL_TIM_Base_Start(&htim21);
-  
+      if (HAL_TIM_Base_Init(&htim21) != HAL_OK){
+    
+    Error_Handler(); // Initialization Error
+  }
+   //HAL_TIM_Base_MspInit(&htim21);
   /*
   uwPrescalerValue = (uint32_t)(SystemCoreClock / 5000) - 1;  // it always +1
   TIM_ClockConfigTypeDef sClockSourceConfig;
@@ -180,7 +183,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
   {
     __HAL_RCC_TIM21_CLK_ENABLE();
       // Set the TIMx priority 
-  HAL_NVIC_SetPriority(TIM21_IRQn, 3, 0);
+  HAL_NVIC_SetPriority(TIM21_IRQn, 0, 0);
 
   // Enable the TIMx global Interrupt 
   HAL_NVIC_EnableIRQ(TIM21_IRQn);

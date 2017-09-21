@@ -59,7 +59,7 @@
 
 /* Definition for TIMx's NVIC */
 //#define TIMx_IRQn                      TIM21_IRQn
-//#define TIMx_IRQHandler                TIM21_IRQHandler
+//v#define TIMx_IRQHandler                TIM21_IRQHandler
 
 
 /* USER CODE BEGIN Private defines */

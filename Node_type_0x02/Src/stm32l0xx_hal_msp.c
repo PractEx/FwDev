@@ -39,10 +39,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l0xx_hal.h"
 
-#define TIMx_CLK_ENABLE()              __HAL_RCC_TIM21_CLK_ENABLE()
-/* Definition for TIMx's NVIC */
-#define TIMx_IRQn                      TIM21_IRQn
-#define TIMx_IRQHandler                TIM21_IRQHandler
+//#define TIMx_CLK_ENABLE()              __HAL_RCC_TIM21_CLK_ENABLE()
+// Definition for TIMx's NVIC 
+//#define TIMx_IRQn                      TIM21_IRQn
+//#define TIMx_IRQHandler                TIM21_IRQHandler
 
 extern void _Error_Handler(char *, int);
 /* USER CODE BEGIN 0 */

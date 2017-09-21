@@ -45,9 +45,11 @@
 #include "string.h"
 #include "stm32l0xx_it.h"
 
+HAL_TIM_StateTypeDef std_t21;
+
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-
+void TIM21_IRQHandler(void);
 //UART_HandleTypeDef UartHandle;
 
 #define  PERIOD_VALUE       (uint32_t)(1024 - 1)  /* Period Value  */
@@ -74,8 +76,15 @@ int main(void)
   MX_TIM2_Init();               // init timer2 for pwms
   MX_TIM21_Init();              // init timer21 for pwms
   
+  
+  
   //HAL_TIM_Base_Start_IT(&htim21); 
-  HAL_TIM_Base_Start(&htim21); 
+  if(HAL_TIM_Base_Start_IT(&htim21) != HAL_OK); 
+  {
+     /* Starting Error */
+    //Error_Handler();
+  }
+  
   
   if (HAL_UART_Init(&huart2) != HAL_OK)
   {
@@ -137,19 +146,26 @@ int main(void)
   //HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin); //heartbeat
     timer_value21 = __HAL_TIM_GET_COUNTER(&htim21);
     timer_value2 = __HAL_TIM_GET_COUNTER(&htim2);
-  
+    std_t21 = HAL_TIM_Base_GetState(&htim21);
   }
   
 
 }
 
+
+void TIM21_IRQHandler(void) // do i need this???
+{
+    HAL_TIM_IRQHandler(&htim21);
+}
+
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   //BSP_LED_Toggle(LED3);
-  //if (htim->Instance == TIM21) 
-  //{ // maybe not needed
+  if (htim->Instance == TIM21) 
+  { // maybe not needed
     HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-  //}
+  }
 }
 
 // System Clock Configuration
